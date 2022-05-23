@@ -15,6 +15,9 @@ public class Location {
 
     Player player;
 
+    @Transient
+    Character character;
+
     public List<Location> neighbours() {
         return neighbours;
     }
@@ -30,8 +33,17 @@ public class Location {
         updatePlayer();
         for (Location location : neighbours) {
             Menu.instance().commands().add(new Command("travel to " + location.name(), "enter", location).setState(Command.State.VISIBLE));
+            Menu.instance().commands().add(new Command("alt travel to " + location.name(), "alternate_enter", location).setState(Command.State.VISIBLE));
         }
         printf("Welcome To %s %n", name);
+    }
+
+    public void alternate_enter(Character character){
+        this.character = character;
+        for (Location location : neighbours) {
+            Menu.instance().commands().add(new Command("travel to " + location.name(), "enter", location).setState(Command.State.VISIBLE));
+            Menu.instance().commands().add(new Command("alt travel to " + location.name(), "alternate_enter", location).setState(Command.State.VISIBLE));
+        }
     }
 
     private void updatePlayer() {

@@ -1,7 +1,6 @@
 package cucumber;
 
 import game.Game;
-import interactions.*;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 
@@ -35,7 +34,7 @@ public class GameScenario {
     @When("I go to {string}")
     public void iGoTo(String place) {
         Assertions.assertTrue(game.player().location().neighbours().stream().anyMatch(location -> location.name().equals(place)));
-        Menu.instance().callCommand("travel to " + place);
+        Menu.instance().callCommand("alt travel to " + place + game.player());
     }
 
 
