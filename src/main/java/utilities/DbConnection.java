@@ -11,14 +11,14 @@ public class DbConnection {
 
 	public DbConnection() {}
 
-	public static DbConnection getInstance()
+	public static DbConnection instance()
 	{
 		return instance;
 	}
 
 	Datastore datastore = null;
 
-	public Datastore getDatastore()
+	public Datastore datastore()
 	{
 		if (datastore == null) {
 			connect();

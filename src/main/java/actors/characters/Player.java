@@ -7,34 +7,44 @@ import world.Location;
 
 @Entity
 public class Player extends Character {
-	@Id
-	String id;
+    @Id
+    String id;
 
-	public String name()
-	{
-		return name;
-	}
+    String name;
 
-	public Player setName(String name)
-	{
-		this.name = name;
-		return this;
-	}
+    @Reference
+    Location location;
 
-	String name;
+    public Player() {
 
-	@Reference
-	Location location;
+    }
 
-	public Location location()
-	{
-		return location;
-	}
 
-	public Player setLocation(Location location)
-	{
-		this.location = location;
-		return this;
-	}
+    public Location location() {
+        return location;
+    }
 
+    public Player setLocation(Location location) {
+        this.location = location;
+        return this;
+    }
+
+    private void travelTo(String place) {
+        Location destination;
+        if ((destination = this.location.neighbours().stream().filter(location -> location.name().equals(place)).findFirst().orElse(null)) != null) {
+            location = destination;
+        }
+        else {
+            System.out.printf("No exit found to: %s", place);
+        }
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Player setName(String name) {
+        this.name = name;
+        return this;
+    }
 }
