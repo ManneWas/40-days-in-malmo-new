@@ -54,9 +54,10 @@ public class Command {
     }
 
     public void call(Object... args) {
+
         if (method != null && state != State.BLOCKED) {
             try {
-                if (method().isVarArgs() && method.getParameterCount() == args.length) {
+                if (method.getParameterCount() == args.length) {
                     method.invoke(owner, args);
                 }
                 else if (!method.isVarArgs()) {

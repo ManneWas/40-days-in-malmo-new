@@ -36,9 +36,8 @@ public class Game {
         }
         player = new Player();
         Menu.instance().setPlayer(player);
-        playerLocation.enter();
+        playerLocation.alternate_enter(player);
         datastore.save(player);
-        datastore.save(playerLocation);
         return this;
     }
 
