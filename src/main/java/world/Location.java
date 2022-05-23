@@ -1,5 +1,6 @@
 package world;
 
+import actors.characters.Character;
 import actors.characters.Player;
 import dev.morphia.annotations.*;
 import interactions.*;
@@ -14,6 +15,9 @@ public class Location {
     private String name;
 
     Player player;
+
+    @Transient
+    Character character;
 
     public List<Location> neighbours() {
         return neighbours;
@@ -32,6 +36,14 @@ public class Location {
             Menu.instance().commands().add(new Command("travel to " + location.name(), "enter", location).setState(Command.State.VISIBLE));
         }
         printf("Welcome To %s %n", name);
+    }
+
+    public void alternate_enter(Player player){
+        this.player = player;
+        player.setLocation(this);
+        for (Location location : neighbours) {
+            Menu.instance().commands().add(new Command("alt travel to " + location.name(), "alternate_enter", location).setState(Command.State.VISIBLE));
+        }
     }
 
     private void updatePlayer() {

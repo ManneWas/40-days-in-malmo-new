@@ -20,6 +20,7 @@ public class GameScenario {
     @Given("I am at {string}")
     public void iAmAt(String place) {
         Assertions.assertEquals(place, game.player().location().name());
+
     }
 
     @Given("the game prologue story is told")
@@ -35,7 +36,8 @@ public class GameScenario {
     @When("I go to {string}")
     public void iGoTo(String place) {
         Assertions.assertTrue(game.player().location().neighbours().stream().anyMatch(location -> location.name().equals(place)));
-        Menu.instance().callCommand("travel to " + place);
+        new Terminal().displayCommands();
+        Menu.instance().callCommand("alt travel to " + place, game.player());
     }
 
 
@@ -47,4 +49,5 @@ public class GameScenario {
     public void iQuit() {
         //  game.menu.callCommand("quit");
     }
+
 }

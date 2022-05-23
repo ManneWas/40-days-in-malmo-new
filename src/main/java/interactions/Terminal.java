@@ -26,7 +26,7 @@ public class Terminal {
 
     public void displayCommands() {
         printf("Command list: %n");
-        Menu.instance().commands().stream().filter(command -> command.state() != Command.State.HIDDEN).forEach(command -> printf("%s : %s %n", command.name(), command.description()));
+        Menu.instance().commands().stream().filter(command -> command.state() != Command.State.HIDDEN).forEach(command -> printf("%s : %s %n", command.signature(), command.description()));
     }
 
     private void printf(String format, Object... args) {

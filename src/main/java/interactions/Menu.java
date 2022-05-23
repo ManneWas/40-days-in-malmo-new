@@ -6,16 +6,9 @@ import java.util.*;
 
 public class Menu {
 
-    public Player player() {
-        return player;
-    }
-
-    public void setPlayer(final Player player) {
-        this.player = player;
-    }
 
     Player player;
-
+    private final List<Command> commands = new ArrayList<>();
 
     private void printf(String format, Object... args) {
         System.out.printf(format, args);
@@ -29,10 +22,10 @@ public class Menu {
         return instance;
     }
 
-    private final List<Command> commands = new ArrayList<>();
 
 
-    public void callCommand(String call) {
+
+    public void callCommand(String call, Object...args) {
         List<Command> matches = commands.stream().filter(command -> call.contains(command.signature())).toList();
 
         if (matches.isEmpty()) {
@@ -41,7 +34,6 @@ public class Menu {
         }
         else if (matches.size() == 1) {
 
-            String args = call.replace(matches.get(0).signature(), "");
             matches.get(0).call(args);
         }
         else {
@@ -53,4 +45,13 @@ public class Menu {
     public List<Command> commands() {
         return commands;
     }
+
+    public Player player() {
+        return player;
+    }
+
+    public void setPlayer(final Player player) {
+        this.player = player;
+    }
+
 }
