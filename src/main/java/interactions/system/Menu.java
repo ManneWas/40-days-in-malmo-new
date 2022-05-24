@@ -1,4 +1,4 @@
-package interactions;
+package interactions.system;
 
 import actors.characters.Player;
 
@@ -33,13 +33,25 @@ public class Menu {
             printf("Command: %10s not found", call);
         }
         else if (matches.size() == 1) {
-
+            if (matches.get(0).bStateChange()){
+                commands.clear();
+            }
             matches.get(0).call(args);
+
         }
         else {
             printf("Commands matching the call: %n");
             matches.forEach(command -> printf("%s %n", command.signature()));
         }
+    }
+
+    public void addCommand(Command command){
+        System.out.println(command.signature() + " is being added");
+        commands.add(command);
+    }
+
+    private void addDefaults() {
+        commands.add(new Command("quit","quit",this));
     }
 
     public List<Command> commands() {
@@ -49,6 +61,8 @@ public class Menu {
     public Player player() {
         return player;
     }
+
+
 
     public void setPlayer(final Player player) {
         this.player = player;

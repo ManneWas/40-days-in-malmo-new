@@ -1,9 +1,10 @@
-package interactions;
+package interactions.system;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 public class Command {
+
 
     public enum State {
         VISIBLE, HIDDEN, BLOCKED
@@ -19,6 +20,17 @@ public class Command {
     private final Method method;
     private String description;
     private State state;
+    private boolean stateChanger = false;
+    public Command setIsStateChanger(final boolean stateChanger) {
+        this.stateChanger = stateChanger;
+        return this;
+    }
+
+
+
+    public boolean bStateChange() {
+        return stateChanger;
+    }
 
     public Command.State state() {
         return state;
@@ -67,17 +79,18 @@ public class Command {
                     printf("Invalid amount of input parameters: %d, expected %d %n", args.length, method.getParameterCount());
                 }
 
+
             }
             catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
 
         }
-        else if (state == State.BLOCKED){
+        else if (state == State.BLOCKED) {
             printf("Method %s is not allowed %n", signature);
         }
         else {
-            printf("Method %s does not exist %n", signature);
+            printf("Method %s does not exist %n", name);
         }
     }
 

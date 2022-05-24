@@ -2,10 +2,12 @@ package game;
 
 import actors.characters.Player;
 import dev.morphia.Datastore;
-import interactions.Menu;
-import org.jetbrains.annotations.Nullable;
-import utilities.DbConnection;
-import world.Location;
+import interactions.system.Menu;
+import world.*;
+
+import java.util.*;
+
+import static utilities.DbConnection.instance;
 
 
 public class Game {
@@ -17,38 +19,26 @@ public class Game {
     public Game() {menu = Menu.instance();}
 
     public Game new_game() {
+        List<String> place_names = Arrays.asList("Malmö C", "Möllan", "Södervärn", "Kirseberg", "Mobilia", "Emporia");
+        World world = new World();
+        world.populate(place_names);
         Location playerLocation;
-        Datastore datastore = DbConnection.instance().datastore();
-        if (fetchStartLocation() == null) {
-            datastore.save(new Location().setName("Start"));
-        }
-        if (fetchMalmoC() == null) {
-            datastore.save(new Location().setName("Malmö C"));
-        }
-        playerLocation = fetchStartLocation();
-        Location malmoC = fetchMalmoC();
-        assert playerLocation != null;
-        assert malmoC != null;
-        if (playerLocation.neighbours().stream().noneMatch(location -> location.name().equals(malmoC.name()))) {
-            playerLocation.neighbours().add(malmoC);
-            datastore.save(playerLocation);
-            System.out.println("Adding Malmö C to Start location neighbours");
-        }
+        Datastore datastore = instance().datastore();
         player = new Player();
         Menu.instance().setPlayer(player);
-        playerLocation.alternate_enter(player);
+        Objects.requireNonNull(world.fetchLocation("Start")).enter();
         datastore.save(player);
         return this;
     }
 
 
     public void load() {
-        player = DbConnection.instance().datastore().find(Player.class).first();
+        player = instance().datastore().find(Player.class).first();
     }
 
     public void save() {
         if (player != null) {
-            DbConnection.instance().datastore().save(player);
+            instance().datastore().save(player);
         }
     }
 
@@ -62,15 +52,5 @@ public class Game {
         return player;
     }
 
-    @Nullable
-    private Location fetchStartLocation() {
-        return DbConnection.instance().datastore().find(Location.class).stream().filter(location -> location.name().equalsIgnoreCase("Start")).findFirst().orElse(null);
-    }
-
-    @Nullable
-    private Location fetchMalmoC() {
-        return DbConnection.instance().datastore().find(Location.class).stream().filter(location -> location.name().equalsIgnoreCase("Malmö C")).findFirst().orElse(null);
-
-    }
 
 }

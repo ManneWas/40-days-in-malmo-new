@@ -1,9 +1,9 @@
 package world;
 
 import actors.characters.Character;
-import actors.characters.Player;
+import actors.characters.*;
 import dev.morphia.annotations.*;
-import interactions.*;
+import interactions.system.*;
 
 import java.util.*;
 
@@ -14,6 +14,11 @@ public class Location {
 
     private String name;
 
+    @Transient
+    Matrix matrix = new Matrix();
+
+
+    @Transient
     Player player;
 
     @Transient
@@ -33,22 +38,31 @@ public class Location {
     public void enter() {
         updatePlayer();
         for (Location location : neighbours) {
-            Menu.instance().commands().add(new Command("travel to " + location.name(), "enter", location).setState(Command.State.VISIBLE));
+
+            Command enter = new Command("travel to " + location.name(), "enter", location) {{
+                setState(Command.State.VISIBLE);
+                setIsStateChanger(true);
+            }};
+
+            Menu.instance().commands().add(enter);
         }
+        Command lookAround = new Command("look around", "lookAround", this) {{
+            setState(Command.State.VISIBLE);
+            setIsStateChanger(false);
+        }};
         printf("Welcome To %s %n", name);
+        Menu.instance().addCommand(lookAround);
     }
 
-    public void alternate_enter(Player player){
-        this.player = player;
-        player.setLocation(this);
-        for (Location location : neighbours) {
-            Menu.instance().commands().add(new Command("alt travel to " + location.name(), "alternate_enter", location).setState(Command.State.VISIBLE));
-        }
+    public void lookAround() {
+            printf("As i look around %s, I see: %n",name);
+            matrix.vicinity().forEach(actor -> printf("%s %n", actor.name()));
     }
 
     private void updatePlayer() {
         this.player = Menu.instance().player();
         player.setLocation(this);
+        matrix.enter(0, 0);
     }
 
     public void showNeighbours() {
@@ -71,4 +85,7 @@ public class Location {
     }
 
 
+    public Matrix matrix() {
+        return matrix;
+    }
 }
