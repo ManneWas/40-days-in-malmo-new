@@ -56,7 +56,7 @@ public class Location {
 
     public void lookAround() {
             printf("As i look around %s, I see: %n",name);
-            matrix.vicinity().forEach(actor -> printf("%s %n", actor.name()));
+            matrix.vicinity().forEach(actor -> {printf("%s %n", actor.name());actor.interact();});
     }
 
     private void updatePlayer() {

@@ -46,9 +46,8 @@ Feature: Full Game
 
   Scenario: Pick up Torch
     Given I see a "Torch" item
-    And I have space in my backpack
-    When I approach the "Torch" item
-    And I say "pick up Torch"
+    And I have space in my backpack for a "Torch"
+    When I say "pick up Torch"
     Then the "Torch" item is in my backpack
 
   Scenario: Open backpack

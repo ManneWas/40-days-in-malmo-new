@@ -1,6 +1,6 @@
 package actors;
 
-public class Actor {
+public class Actor implements interactable{
 
     String name;
     protected int level;
@@ -17,5 +17,13 @@ public class Actor {
     public int level() {
         return level;
     }
+
+
+    @Override
+    public void interact() {
+        System.out.printf("Intreacting with %s %n", name());
+    }
+
+
 
 }
