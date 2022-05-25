@@ -89,6 +89,7 @@ public class GameScenario {
         else {
             Menu.instance().callCommand(command);
         }
+
     }
 
     @Test

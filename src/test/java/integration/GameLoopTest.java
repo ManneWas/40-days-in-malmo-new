@@ -33,11 +33,13 @@ public class GameLoopTest {
         //Startup with Empty backpack
         theGameIsOn();
         iAmAt("Start");
+        iStartWithAnEmptyBackpack();
         iGoTo("Malmö C");
         iAmAt("Malmö C");
 
         //@fixme dont hardcode this shit
-        game.player().location().matrix().getTile(0, 0).place(new Item().setName("Torch"));
+        game.player().location().matrix().getTile(0, 0).place(new Item().setSize(3).setName("Torch"));
+
 
         //Find a torch
         iAmAt("Malmö C");
@@ -46,10 +48,17 @@ public class GameLoopTest {
 
         // Pick up torch
         iSeeAnItem("Torch");
-
+        iHaveSpaceInMyBackpack("Torch");
+        iSay("pick up Torch");
+        theItemIsInMyBackpack("Torch");
     }
 
-    
+
+    private void iStartWithAnEmptyBackpack() {
+        Assertions.assertEquals(game.player().backpack().spaceLimit(), game.player().backpack().currentSpace());
+    }
+
+
     public void theGameIsOn() {
         game = new Game();
         game.new_game().start();
@@ -87,6 +96,16 @@ public class GameLoopTest {
     public void iSeeAnItem(String itemName) {
         Assertions.assertTrue(outContent.toString().contains(itemName));
     }
+
+    public void iHaveSpaceInMyBackpack(String itemName) {
+        Assertions.assertTrue(game.player().backpack().spaceCheck((Item) game.player().location().matrix().vicinity().stream().filter(actor -> actor.name().equals(itemName)).findFirst().orElse(null)));
+    }
+
+
+    private void theItemIsInMyBackpack(String itemName) {
+        Assertions.assertTrue(game.player().backpack().contains(itemName));
+    }
+
 }
 
 

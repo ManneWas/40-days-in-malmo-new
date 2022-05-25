@@ -3,6 +3,7 @@ package actors.characters;
 import actors.Actor;
 import dev.morphia.annotations.*;
 import interactions.combat.Combat;
+import inventories.Backpack;
 import world.Location;
 
 @Entity
@@ -10,7 +11,8 @@ public class Player extends Character {
     @Id
     String id;
 
-
+    @Transient
+    private Backpack backpack = new Backpack();
 
     @Reference
     Location location;
@@ -45,5 +47,9 @@ public class Player extends Character {
     public void fight(){
         Combat combat = new Combat();
         combat.setResponder((Character) inFocus).setInstigator(this);
+    }
+
+    public Backpack backpack() {
+        return backpack;
     }
 }

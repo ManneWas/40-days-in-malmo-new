@@ -112,5 +112,7 @@ public class Matrix {
         return vicinity().stream().filter(actor -> actor.name().equals(name)).findFirst().orElse(null);
     }
 
-
+    public PlayerPoint playerPoint() {
+        return playerPoint;
+    }
 }
