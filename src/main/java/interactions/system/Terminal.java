@@ -1,36 +1,59 @@
 package interactions.system;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Terminal {
-    String line;
-    final BufferedReader reader;
+	String line;
+	final BufferedReader reader;
+	private boolean playing = true;
 
-    public Terminal() {
-        reader = new BufferedReader(new InputStreamReader(System.in));
-    }
+	public Terminal()
+	{
+		reader = new BufferedReader(new InputStreamReader(System.in));
+	}
 
-    public void run() {
-        printf("Welcome to the Terminal %n %s", "-".repeat(15));
+	public void run()
+	{
+		printf("Welcome to the Terminal %n %s", "-".repeat(15));
+        displayCommands();
+
         try {
-            while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
+				Menu.instance().callCommand(line);
                 displayCommands();
+
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 
+	}
 
-    }
+	public void quit()
+	{
+		System.exit(0);
+	}
 
-    public void displayCommands() {
-        printf("Command list: %n");
-        Menu.instance().commands().stream().filter(command -> command.state() != Command.State.HIDDEN)
-                .forEach(command -> printf("%s%s %n", command.signature(), command.description() != null ? " : " + command.description() +"." : "."));
-    }
+	public Terminal setPlaying(boolean playing)
+	{
+		this.playing = playing;
+		return this;
+	}
 
-    private void printf(String format, Object... args) {
-        System.out.printf(format, args);
-    }
+	public void displayCommands()
+	{
+		printf("Command list: %n");
+		Menu.instance().commands().stream().filter(command -> command.state() != Command.State.HIDDEN)
+				.forEach(command -> printf("%s%s %n", command.signature(), command.description() != null ?
+                                                                           " : " + command.description() + "." : "."));
+        printf("%n");
+	}
+
+	private void printf(String format, Object... args)
+	{
+		System.out.printf(format, args);
+	}
 }
