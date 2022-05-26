@@ -83,3 +83,8 @@ nb-configuration.xml
 ## OS X
 ##############################
 .DS_Store
+
+##############################
+## 40-Days
+##############################
+tools/obsidian_parser/output
