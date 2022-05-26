@@ -1,0 +1,3 @@
+"neighbours":
+- [[Gamla Stan]]
+- [[Slottsparken]]
