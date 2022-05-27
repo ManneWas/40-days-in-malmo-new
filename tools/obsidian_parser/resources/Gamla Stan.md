@@ -1,0 +1,13 @@
+"neighbours":
+- [[Malmö C]]
+- [[Caroli]]
+- [[Lilla Torg]]
+- [[Stortorget]]
+- [[Kungsparken]]
+- [[Slottsparken]]
+- [[Gustav Adolfs Torg]]
+- [[Västra Hamnen]]
+- [[Möllevången]]
+- [[Ribbersborg]]
+- [[Värnhem]]
+- [[Triangeln]]
