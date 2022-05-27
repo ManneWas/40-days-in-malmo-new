@@ -3,7 +3,6 @@ package world;
 import actors.characters.Enemy;
 import actors.items.Item;
 import dev.morphia.Datastore;
-import org.jetbrains.annotations.Nullable;
 import utilities.DbConnection;
 
 import java.util.List;
@@ -61,7 +60,6 @@ public class World {
         DbConnection.instance().datastore().save(location);
     }
 
-    @Nullable
     public static Location fetchLocation(String name) {
         return DbConnection.instance().datastore().find(Location.class).stream()
                 .filter(location -> location.name().equalsIgnoreCase(name)).findFirst().orElse(null);

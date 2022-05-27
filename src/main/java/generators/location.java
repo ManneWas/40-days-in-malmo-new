@@ -16,18 +16,22 @@ public class location {
                 try (Reader reader = Files.newBufferedReader(filePath(file))) {
                     ObjectMapper objectMapper = new ObjectMapper();
                     var location = objectMapper.readTree(file);
-                    var neighbors = location.get("neighbours");
                     var items = location.get("items");
                     World.createLocation(location.get("name").asText());
-                    for (String name : neighbors.findValuesAsText("name")) {
-                        World.createLocation(name);
-                    }
+                }
+                catch (IOException ignored) {}
+            }
+        }
+        for (File file : files()) {
+            if (filePath(file) != null) {
+                Configuration configuration;
+                try (Reader reader = Files.newBufferedReader(filePath(file))) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    var location = objectMapper.readTree(file);
+                    var neighbors = location.get("neighbours");
                     World.addNeighbours(location.get("name").asText(), neighbors.findValuesAsText("name"));
                 }
-                catch (IOException ignored) {
-
-                }
-
+                catch (IOException ignored) {}
             }
         }
 
