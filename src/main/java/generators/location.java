@@ -1,22 +1,61 @@
 package generators;
 
-import world.Location;
-import world.World;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import world.*;
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 public class location {
-	public void generate(){
-		List<String> locations = new ArrayList<>();
-		for (String name:locations){
-			new World().createLocation(name);
+    public static void generate() {
+        for (File file : files()) {
+            if (filePath(file) != null) {
+                Configuration configuration;
+                try (Reader reader = Files.newBufferedReader(filePath(file))) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    var location = objectMapper.readTree(file);
+                    var neighbors = location.get("neighbours");
+                    var items = location.get("items");
+                    World.createLocation(location.get("name").asText());
+                    for (String name : neighbors.findValuesAsText("name")) {
+                        World.createLocation(name);
+                    }
+                    World.addNeighbours(location.get("name").asText(), neighbors.findValuesAsText("name"));
+                }
+                catch (IOException ignored) {
 
-		}
-		for (String place:locations){
+                }
 
-			new World().addNeighbours(place,new ArrayList<String>());
+            }
+        }
 
-		}
-	}
+    }
+
+    private static List<File> files() {
+        List<File> result;
+        try (var files = Files.list(Paths.get("src/main/resources/locations")).filter(Files::isRegularFile)) {
+            result = files.map(Path::toFile).toList();
+        }
+        catch (IOException e) {
+            result = null;
+        }
+        return result;
+    }
+
+
+    private static Path filePath(final File file) {
+        Path result;
+        if (file.getName().contains("json")) {
+            result = file.toPath();
+        }
+        else {result = null;}
+        return result;
+    }
+
+    private record Configuration(String name, String[] neighbors, String[] items, String[] npcs) {
+
+    }
+
 }
