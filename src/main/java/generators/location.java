@@ -1,22 +1,29 @@
 package generators;
 
-import world.Location;
-import world.World;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.file.*;
 import java.util.List;
 
 public class location {
-	public void generate(){
-		List<String> locations = new ArrayList<>();
-		for (String name:locations){
-			new World().createLocation(name);
+    public void generate() {
+        try (var files = Files.list(Paths.get("folder"))
+                .filter(Files::isRegularFile)) {
+            for (File file : files.map(Path::toFile).toList()) {
+                if (file.getName().contains(".json")) {
+                    JSONObject locationInfo = new JSONObject(Files.readAllBytes(file.toPath()));
+                    System.out.println(locationInfo);
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		}
-		for (String place:locations){
+    private record configuration(String name, List<String> neighbors, List<String> items, List<String> npcs) {
 
-			new World().addNeighbours(place,new ArrayList<String>());
+    }
 
-		}
-	}
 }
